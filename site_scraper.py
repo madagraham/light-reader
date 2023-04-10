@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 from datetime import datetime, timezone, timedelta
+import os
+from twilio.rest import Client
 
 # Reading from The Empire State Building website to determine lights information 
 url = "https://www.esbnyc.com/about/tower-lights"
@@ -23,4 +25,21 @@ time_obj = datetime.strptime(sunset_time, '%I:%M:%S %p')
 # Convert UTC time to EST time
 est_tz = timezone(timedelta(hours=-4))
 est_time = time_obj.replace(tzinfo=timezone.utc).astimezone(est_tz)
+
+# Setting up Twilio notification
+account_sid = os.environ['TWILIO_ACCOUNT_SID']
+auth_token = os.environ['TWILIO_AUTH_TOKEN']
+twilio_nyc = os.environ['TWILIO_NUMBER']
+recipient = os.environ['RECIPIENT_NUMBER']
+
+client = Client(account_sid, auth_token)
+
+message = client.messages \
+                .create(
+                     body="Hello from by The Empire State Building",
+                     from_=twilio_nyc,
+                     to=recipient
+                 )
+
+print(message.sid)
 
