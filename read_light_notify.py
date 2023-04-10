@@ -11,7 +11,6 @@ soup = BeautifulSoup(response.content, "html.parser")
 
 my_element = soup.select("div.is-today")[0]
 today_empire_state_bldg_color = my_element.text.strip().replace("Share", "")
-print(today_empire_state_bldg_color)
 
 # Code to determine NYC sunset time
 sunset_url = f'https://api.sunrise-sunset.org/json?lat=40.748817&lng=-73.985428'
@@ -36,10 +35,8 @@ client = Client(account_sid, auth_token)
 
 message = client.messages \
                 .create(
-                     body="Hello from by The Empire State Building",
+                     body=today_empire_state_bldg_color,
                      from_=twilio_nyc,
                      to=recipient
                  )
-
-print(message.sid)
 
